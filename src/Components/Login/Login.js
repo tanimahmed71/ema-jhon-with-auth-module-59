@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import "./Login.css";
 
@@ -15,7 +15,8 @@ const Login = () => {
         loading,
         error,
       ] = useSignInWithEmailAndPassword(auth);
-
+      const location =useLocation();
+      const from =location.state?.form?.pathname || "/";
     const handleEmailBlur =event =>{
         setEmail(event.target.value)
     }
@@ -26,7 +27,7 @@ const Login = () => {
         event.preventDefault();
         signInWithEmailAndPassword(email,password);
         if(user){
-            navigate("/home");
+            navigate(from,{replace:true});
         }
     }
     return ( 
@@ -61,8 +62,7 @@ const Login = () => {
          </div>
          <div className='google-container'>
          <div className="google-btn">
-                    <img src="google.png" alt="" /><input className='google-btn' type="submit" value="Continue With Google" />
-              
+                    <img src="google.png" alt="" /><input className='google-btn' type="submit" value="Continue With Google" />  
             </div>
          </div>
         </form>
